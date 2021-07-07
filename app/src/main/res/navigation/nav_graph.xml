@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/cameraListFragment"
         android:name="com.android.speedcam.ui.cameralist.CameraListFragment"
-        android:label="fragment_camera_list"
+        android:label="Cameras"
         tools:layout="@layout/fragment_camera_list" />
 </navigation>

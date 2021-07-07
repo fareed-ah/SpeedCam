@@ -3,9 +3,16 @@ package com.android.speedcam.viewmodels
 import androidx.lifecycle.*
 import com.android.speedcam.network.Camera
 import com.android.speedcam.network.CameraApi
+import com.android.speedcam.repository.CameraRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CameraViewModel :ViewModel() {
+@HiltViewModel
+class CameraViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    private val cameraRepository: CameraRepository
+) :ViewModel() {
 
     private val _cameras = MutableLiveData<List<Camera>>()
 
@@ -16,25 +23,11 @@ class CameraViewModel :ViewModel() {
         getAllCameras()
     }
 
-//    fun allCameras():List<Camera> = cameraDao.getAllCameras()
-
     private fun getAllCameras() {
         viewModelScope.launch {
-            _cameras.value = CameraApi.retrofitService.getCameras()
+            _cameras.value = cameraRepository.getCameras()
             print("CAMERA OUTPUT:")
             _cameras.value!!.forEach { print(it.cityName) }
         }
     }
 }
-
-//class CameraViewModelFactory(
-//    private val cameraDao: CameraDao
-//) : ViewModelProvider.Factory {
-//    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-//        if (modelClass.isAssignableFrom(CameraViewModel::class.java)) {
-//            @Suppress("UNCHECKED_CAST")
-//            return CameraViewModel(cameraDao) as T
-//        }
-//        throw IllegalArgumentException("Unknown ViewModel class")
-//    }
-//}
